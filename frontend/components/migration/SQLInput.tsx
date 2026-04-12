@@ -264,7 +264,7 @@ export default function SQLInput() {
             <p className="section-label">Risk report</p>
             <RiskReport analysis={analysis} />
           </div>
-          {analysis.rollback_plan && (
+          {analysis.rollback_plan?.combined_script && (
             <div className="card">
               <p className="section-label">Rollback script</p>
               <RollbackScript rollbackPlan={analysis.rollback_plan} />
@@ -276,7 +276,7 @@ export default function SQLInput() {
               connectionId={connectionId!}
               sql={sql}
               approvalToken={analysis.approval_token}
-              canExecute={analysis.sandbox_result?.passed === true && analysis.risk_category !== "critical"}
+              canExecute={(analysis.sandbox_result === null || analysis.sandbox_result.passed) && analysis.risk_category !== "critical"}
               riskCategory={analysis.risk_category}
               onSuccess={() => {
                 setSuccess(true)
