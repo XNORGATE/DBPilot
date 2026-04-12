@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "autodb": {
+      "command": "uvx",
+      "args": ["autodb-mcp"],
+      "env": {
+        "AUTODB_API_KEY": "adb_5eaba55b9ad20d03374f59a175fbcaa269dbd6c232931e2d",
+        "AUTODB_BASE_URL": "http://api.autodb.app/"
+      }
+    }
+  }
+}
