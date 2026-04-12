@@ -42,11 +42,11 @@ export interface MigrationAnalysis {
     migration_applied: boolean
     tables_created: number
     duration_ms: number
-  }
+  } | null
   rollback_plan: {
     has_irreversible: boolean
     combined_script: string
-  }
+  } | null
   approval_token: string
 }
 

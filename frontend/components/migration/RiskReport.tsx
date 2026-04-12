@@ -63,31 +63,41 @@ export default function RiskReport({ analysis }: { analysis: MigrationAnalysis }
       </div>
 
       {/* Sandbox result */}
-      <div
-        style={{
-          background: analysis.sandbox_result.passed ? "var(--success-subtle)" : "var(--danger-subtle)",
-          border: `0.5px solid ${analysis.sandbox_result.passed ? "var(--success)" : "var(--danger)"}`,
-          borderRadius: 7,
-          padding: "9px 12px",
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          fontSize: 12,
-          color: analysis.sandbox_result.passed ? "var(--success)" : "var(--danger)",
-          fontWeight: 600,
-        }}
-      >
-        {analysis.sandbox_result.passed ? <Check size={14} /> : <X size={14} />}
-        Sandbox {analysis.sandbox_result.passed ? "passed" : "failed"}
-        <span style={{ fontWeight: 400, color: analysis.sandbox_result.passed ? "var(--success-text)" : "var(--danger-text)" }}>
-          · {analysis.sandbox_result.duration_ms}ms
-        </span>
-        {!analysis.sandbox_result.passed && (
-          <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 400 }}>
-            Fix your SQL before proceeding
+      {analysis.sandbox_result ? (
+        <div
+          style={{
+            background: analysis.sandbox_result.passed ? "var(--success-subtle)" : "var(--danger-subtle)",
+            border: `0.5px solid ${analysis.sandbox_result.passed ? "var(--success)" : "var(--danger)"}`,
+            borderRadius: 7,
+            padding: "9px 12px",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            fontSize: 12,
+            color: analysis.sandbox_result.passed ? "var(--success)" : "var(--danger)",
+            fontWeight: 600,
+          }}
+        >
+          {analysis.sandbox_result.passed ? <Check size={14} /> : <X size={14} />}
+          Sandbox {analysis.sandbox_result.passed ? "passed" : "failed"}
+          <span style={{ fontWeight: 400, color: analysis.sandbox_result.passed ? "var(--success-text)" : "var(--danger-text)" }}>
+            · {analysis.sandbox_result.duration_ms}ms
           </span>
-        )}
-      </div>
+          {!analysis.sandbox_result.passed && (
+            <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 400 }}>
+              Fix your SQL before proceeding
+            </span>
+          )}
+        </div>
+      ) : (
+        <div style={{
+          background: "var(--bg-surface)", border: "0.5px solid var(--border-subtle)",
+          borderRadius: 7, padding: "9px 12px", fontSize: 12,
+          color: "var(--text-tertiary)", fontStyle: "italic",
+        }}>
+          Sandbox not available for this statement type
+        </div>
+      )}
 
       {/* Affected tables */}
       {analysis.affected_tables.length > 0 && (
