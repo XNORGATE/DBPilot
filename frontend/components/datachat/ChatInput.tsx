@@ -5,7 +5,10 @@ import { apiFetch } from "@/lib/api"
 import type { ChatResult, AgentResult } from "@/lib/types"
 import ResultsTable from "./ResultsTable"
 import ResultsChart from "./ResultsChart"
-import { Hash, Trophy, TrendingUp, BarChart2, Search, Lightbulb, Bot, ChevronUp, ChevronDown, PenLine, MessageSquare, Info, Check, X } from "lucide-react"
+import { Hash, Trophy, TrendingUp, BarChart2, Search, Lightbulb, Bot, ChevronUp, ChevronDown, PenLine, MessageSquare, Info, Check, X, Mic, MicOff } from "lucide-react"
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySpeechRecognition = any
 
 // ── Message types ─────────────────────────────────────────────────────────────
 
@@ -466,6 +469,8 @@ export default function ChatInput() {
   const [autocomplete, setAutocomplete] = useState<string[]>([])
   const [acSelected, setAcSelected] = useState(0)
 
+  const [listening, setListening] = useState(false)
+  const recognitionRef = useRef<AnySpeechRecognition>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -606,6 +611,37 @@ export default function ChatInput() {
     setMessages((prev) => prev.map((m) =>
       m.id === msgId && m.type === "crud" ? { ...m, status: "cancelled" } as CrudMessage : m
     ))
+  }
+
+  function toggleVoice() {
+    if (listening) {
+      recognitionRef.current?.stop()
+      setListening(false)
+      return
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as any
+    const SR = w.SpeechRecognition || w.webkitSpeechRecognition
+    if (!SR) {
+      alert("Voice input is not supported in this browser. Try Chrome or Edge.")
+      return
+    }
+    const rec = new SR()
+    rec.lang = "en-US"
+    rec.continuous = false
+    rec.interimResults = true
+    rec.onstart = () => setListening(true)
+    rec.onend   = () => setListening(false)
+    rec.onerror = () => setListening(false)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onresult = (e: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join("")
+      setQuery(transcript)
+      handleQueryChange(transcript)
+    }
+    recognitionRef.current = rec
+    rec.start()
   }
 
   const readMessages = messages.filter((m): m is ReadMessage => m.type === "read")
@@ -851,14 +887,33 @@ export default function ChatInput() {
                 style={{
                   flex: 1, fontSize: 15, padding: "13px 18px",
                   borderRadius: 10, boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  outline: listening ? "2px solid var(--danger)" : undefined,
                 }}
                 value={query}
                 onChange={(e) => handleQueryChange(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={'Ask anything or say \u201cAdd patient Jane Doe, born 1990\u2026\u201d'}
+                placeholder={listening ? "Listening…" : 'Ask anything or say \u201cAdd patient Jane Doe, born 1990\u2026\u201d'}
                 disabled={loading}
                 autoFocus
               />
+              {/* Mic button */}
+              <button
+                type="button"
+                onClick={toggleVoice}
+                title={listening ? "Stop recording" : "Voice input"}
+                style={{
+                  width: 46, height: 46, borderRadius: 10, flexShrink: 0,
+                  background: listening ? "var(--danger-subtle)" : "var(--bg-surface)",
+                  border: `0.5px solid ${listening ? "var(--danger)" : "var(--border-subtle)"}`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer", color: listening ? "var(--danger)" : "var(--text-secondary)",
+                  transition: "all 0.15s",
+                  animation: listening ? "pulse-ring 1.5s ease-out infinite" : "none",
+                }}
+              >
+                {listening ? <MicOff size={16} /> : <Mic size={16} />}
+              </button>
+              {/* Send button */}
               <button
                 className="btn-primary"
                 onClick={() => submitQuery()}
@@ -875,7 +930,9 @@ export default function ChatInput() {
               </button>
             </div>
             <p style={{ fontSize: 11, color: "var(--text-disabled)", marginTop: 6, textAlign: "center" }}>
-              Query data or add/update records — AI reviews every change before saving
+              {listening
+                ? "Listening — speak now, then click the mic to stop"
+                : "Query data or add/update records — AI reviews every change before saving"}
             </p>
           </div>
         </div>
