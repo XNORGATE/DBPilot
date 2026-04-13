@@ -1,6 +1,7 @@
 # YunoClinic
 
-AI-powered clinic database management platform. Two-portal system: staff access patient data in plain English, admins safely evolve the schema with AI-assisted migration tooling.
+This is a AI-powered clinic database management platform. We are focusing on building an Application that allows both non-tech and tech people using Natural Language to interact with Database in the easiest way.
+For best User Experience, We have two-portal system: staff access patient data in plain English, admins safely evolve the schema with AI-assisted migration tooling.
 
 Built on top of the **DBPilot** platform using **AutoDB**, **Claude AI**, and **Next.js 14**.
 
