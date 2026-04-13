@@ -4,6 +4,29 @@ AI-powered clinic database management platform. Two-portal system: staff access 
 
 Built on top of the **DBPilot** platform using **AutoDB**, **Claude AI**, and **Next.js 14**.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-dbpilot--bay.vercel.app-blue?style=flat-square)](https://dbpilot-bay.vercel.app/)
+[![GitHub](https://img.shields.io/badge/GitHub-XNORGATE%2FDBPilot-181717?style=flat-square&logo=github)](https://github.com/XNORGATE/DBPilot)
+[![YouTube](https://img.shields.io/badge/YouTube-Demo%20Video-FF0000?style=flat-square&logo=youtube)](https://youtu.be/i54gkpbQ_TA)
+[![Slides](https://img.shields.io/badge/Google%20Slides-Presentation-FBBC04?style=flat-square&logo=google-slides)](https://docs.google.com/presentation/d/1drTt6_BFZ3L38xHytalHhbHYE2bIoYufbEuPEwqbfp4/edit?usp=sharing)
+
+---
+
+![YunoClinic Landing](demo/image.png)
+
+---
+
+## Screenshots
+
+| Dashboard | DataChat |
+|---|---|
+| ![Dashboard](demo/dashboard.png) | ![DataChat](demo/datachat.png) |
+
+| Admin Panel | MigrationGuard |
+|---|---|
+| ![Admin Panel](demo/adminPanel.png) | ![MigrationGuard](demo/MigrationPanel.png) |
+
+![DBCopilot](demo/DBCopliot.png)
+
 ---
 
 ## Features
